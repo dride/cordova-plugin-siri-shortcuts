@@ -42,23 +42,21 @@ import IntentsUI
                     let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
                     viewController.delegate = self.shortcutPresentedDelegate!
 
-                    DispatchQueue.main.async {
-                        self.viewController?.present(viewController, animated: true, completion: nil)
-                    }
+                    self.viewController?.present(viewController, animated: true, completion: {
+                        // tell Cordova we're all OK
+                        self.sendStatusOk(command)
+                        return
+                    })
+                    
 
-                    // tell Cordova we're all OK
-                    self.sendStatusOk(command)
-
+                }else{
+                    self.sendStatusError(command)
                     return
                 }
-
+            }else{
+                // shortcut not donated
                 self.sendStatusError(command)
-
-                return
             }
-
-            // shortcut not donated
-            self.sendStatusError(command)
         })
     }
 
